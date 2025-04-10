@@ -6,6 +6,7 @@
 let txtName = document.getElementById("Name"); //nombre 
 let txtNumber = document.getElementById("Number"); //cantidad
 let btnAgregar = document.getElementById("btnAgregar");
+const btnClear = document.getElementById("btnClear");
 let alertValidacionesTexto = document.getElementById("alertValidacionesTexto");
 let alertValidaciones = document.getElementById("alertValidaciones");
 let tablaListaCompras = document.getElementById("tablaListaCompras");
@@ -141,6 +142,26 @@ let isValid = true;// esta variable significa que se pusieron todos los campos c
 
  });//btnAgregar 
 
+ //////
+ //botón para limpiar todo 
+
+ btnClear.addEventListener("click", function(event){
+    event.preventDefault();
+
+    alertValidacionesTexto.innerHTML = "";
+    alertValidaciones.style.display = "none";
+    txtName.style.border = "";
+    txtNumber.style.border = "";
+    cuerpoTabla.innerHTML = "";
+    productosTotal.innerText = "";
+    contadorProductos.innerText = "";
+    precioTotal.innerText = "";
+    localStorage.removeItem("datos");
+    localStorage.removeItem("resumen");
+ });
+/////
+
+
  window.addEventListener("load", function(event){
     event.preventDefault();
      if(this.localStorage.getItem("datos")!=null){
@@ -170,4 +191,11 @@ cuerpoTabla.insertAdjacentElement("beforeend", row);
 
  });//window.addEventListener load 
 
+
+ //Agregar la funcionalidad del botón "Limpiar todo"
+ //resumen
+ //tabla
+ //campos
+ //alerta
+ //localStorage (resumen y datos)
 
