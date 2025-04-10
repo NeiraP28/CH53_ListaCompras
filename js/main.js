@@ -21,6 +21,7 @@ const totalPrecio = document.getElementById("totalPrecio");
 let cont = 0; 
 let costoTotal = 0;
 let totalEnProductos = 0; 
+let datos = new Array(); //[] almacena los elemtos de la tabla 
 
 
 
@@ -100,17 +101,38 @@ let isValid = true;// esta variable significa que se pusieron todos los campos c
                    <td>${txtNumber.value}</td>
                    <td>${precio}</td>
                    </tr>`;
+
+       let elemento = { //se crea el objeto para enviarlo al localStorage en una variable nueva, o un objeto 
+                      "cont"    : cont,
+                      "nombre"  : txtName.value,
+                      "cantidad": txtNumber,
+                      "precio"  : precio
+                      };   
+      datos.push(elemento);//se mandan los datos al arreglo de la variable datos 
+
+      //se envian al localStorage, con el nombre que seria "datos" y el formato string con JSON y convertido con el método 
+      localStorage.setItem("datos", JSON.stringify(datos));
          //al final se llama a la tabla y se le insertan los valores en beforeend que es la posicion           
-                   cuerpoTabla.insertAdjacentHTML("beforeend", row);
+      
+         
+     
+         
+                  cuerpoTabla.insertAdjacentHTML("beforeend", row);
                    costoTotal += precio * Number(txtNumber.value);
                    precioTotal.innerText = "$" + costoTotal.toFixed(2);
                   totalEnProductos += Number(txtNumber.value);
                   productosTotal.innerText = totalEnProductos;
                    contadorProductos.innerText = cont; //reutiliza la variable, hace que se vea el numero de
                    //productos que ha agregado en la tabla 
-                  
                    
-                   
+ 
+                   let resumen = { //esto se manda a un objeto y la tabla a un arreglo 
+                    "cont"  : cont,
+         "totalEnProductos" : totalEnProductos,
+         " costoTotal"      :  costoTotal
+                   };
+      localStorage.setItem("resumen", JSON.stringify(resumen));
+   
                    txtName.value = "";//limpia los campos 
                    txtNumber.value = "";
                    txtName.focus(); //agrega el foco nuevamente en el input que queremos 
@@ -119,5 +141,33 @@ let isValid = true;// esta variable significa que se pusieron todos los campos c
 
  });//btnAgregar 
 
+ window.addEventListener("load", function(event){
+    event.preventDefault();
+     if(this.localStorage.getItem("datos")!=null){
+        datos = JSON.parse(this.localStorage.getItem("datos"));
+     }; // datos != null 
+
+     datos.forEach((d) =>{
+        let row = `<tr>
+                  <td>${d.cont}</td>
+                  <td>${d.nombre}</td>
+                  <td>${d.cantidad}</td>
+                  <td>${d.getPrecio}</td>
+                  </tr>`;
+cuerpoTabla.insertAdjacentElement("beforeend", row);
+     });
+
+
+     if(this.localStorage.getItem("resumen")!=null){
+        let resumen = JSON.parse(this.localStorage.getItem("resumen"));
+     costoTotal = resumen.costoTotal;
+     totalEnProductos = resumen.totalEnProductos;
+     cont = resumen.cont;
+     } //resumen != null 
+     precioTotal.innerText = "$" + costoTotal.toFixed(2);
+     productosTotal.innerText = totalEnProductos;
+     contadorProductos.innerText = cont;
+
+ });//window.addEventListener load 
 
 
